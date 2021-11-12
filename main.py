@@ -69,7 +69,7 @@ def update_info(latitude, longitude):
       label_city.config(text='No definido')
       label_state.config(text='No definido')
       label_country.config(text='No definido')
-      img_flag = ImageTk.PhotoImage(Image.open('unknown_flag.png',).resize((175,90), Image.ANTIALIAS))
+      img_flag = ImageTk.PhotoImage(Image.open('img/unknown_flag.png',).resize((175,90), Image.ANTIALIAS))
       label_flag.config(image=img_flag)
       label_flag.image = img_flag
 
@@ -231,7 +231,7 @@ def show_location_evaluator():
 
    # Map and flag Section
 
-   info_img = ImageTk.PhotoImage(Image.open('info.png'))
+   info_img = ImageTk.PhotoImage(Image.open('img/info.png'))
    label_map = Label(frame, image=info_img)
    label_map.place(x=385,y=0)
    label_map.image = info_img
@@ -242,7 +242,7 @@ def show_location_evaluator():
 if __name__ == '__main__':
    window = Tk()
    window.title('[193269/193291] L&A.C2.A3')
-   window.iconphoto(False, PhotoImage(file='icon.png'))
+   window.iconphoto(False, PhotoImage(file='img/icon.png'))
    window.configure(height=600, width=950, bg='#2A0C4E')
    window.resizable(False, False)
    window.eval('tk::PlaceWindow . center')
