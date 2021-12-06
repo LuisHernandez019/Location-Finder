@@ -2,12 +2,13 @@ import re
 import folium
 import flagpy as fp
 from threading import Thread
-from tkinter import Tk,PhotoImage,Frame,LabelFrame,Label,Entry,Radiobutton,StringVar,Button,messagebox
+from tkinter import Tk,PhotoImage,Frame,LabelFrame,Label,Entry,Radiobutton,StringVar,Button,messagebox,Toplevel
 from geopy.geocoders import Nominatim
 from html2image import Html2Image
 from PIL import Image, ImageTk
 
 def get_location_info(latitude,longitude):
+   global location
    location = geolocator.reverse(f"{latitude},{longitude}", language='en')
 
    try:
@@ -120,13 +121,30 @@ def evaluate_location_DD(latitude, longitude):
    except:
       messagebox.showerror(message="Los datos introducidos no son válidos.",title='Error al leer las coordenadas.')
 
+def new_frame():
+   try:
+      frame2 = Toplevel()
+      frame2.geometry('900x125')
+      frame2.config(bg="#2A0C4E")
+      frame2.title('Dirección')
+      frame2.transient(window)
+      frame2.grab_set()	 
+
+      Label(frame2, text='Dirección de la ubicación:', background=background, font='Helvetica 13 bold', fg='#06BCC1').pack(padx=10, pady=10)
+      
+      label_info = Label(frame2, text=location.address, background=background, font='Helvetica 10', fg='white')
+      label_info.pack(padx=10, pady=10)
+   except:
+      frame2.destroy()
+      messagebox.showerror(message="No se pudo encontrar una dirección para la ubicación dada.",title='Error al encontrar una dirección.')
+
 def create_regex():
    global pattern_location
 
-   latitude_range = '([0-9]|[1-8][0-9]|90)' # 0 a 90
-   longitude_range = '([0-9]|[1-9][0-9]|[1][0-7][0-9]|180)' # 0 a 180
+   latitude_range = '([0-9]|[1-8][0-9]|90)'
+   longitude_range = '([0-9]|[1-9][0-9]|[1][0-7][0-9]|180)'
    decimal = '(\.\d+)?'
-   minute_seconds = '([0-9]|[0-5][0-9]|60)' # 0 a 60
+   minute_seconds = '([0-9]|[0-5][0-9]|60)'
    latitude_DMS = '(' + latitude_range + '°' + minute_seconds + '\'' + minute_seconds + '.[\d]+"[NS])'
    longitude_DMS = '(' + longitude_range + '°' + minute_seconds + "'" + minute_seconds + '.[\d]+"[EO])'
 
@@ -152,6 +170,8 @@ def show_location_evaluator():
    global label_country
    global label_map
    global label_flag
+   global font
+   global background
 
    initialize_info()
 
@@ -176,8 +196,8 @@ def show_location_evaluator():
 
    # Degree Minute Second (DMS) Section
 
-   latitude_text = "Latitud:              °           '                    \""
-   longitude_text = "Longitud:           °           '                    \""
+   latitude_text = "Latitud:               °           '                    \""
+   longitude_text = "Longitud:            °           '                    \""
    str_var1 = StringVar()
    str_var2 = StringVar()
 
@@ -239,9 +259,13 @@ def show_location_evaluator():
    label_flag = Label(frame)
    label_flag.place(x=385, y=440)
 
+   # Tourist Section
+
+   Button(frame, text='Obtener más información', font='Helvetica 10', width=23, command=new_frame).place(x=660,y=475)
+
 if __name__ == '__main__':
    window = Tk()
-   window.title('[193269/193291] L&A.C2.A3')
+   window.title('[193269/193291] PC.C3.Proyecto')
    window.iconphoto(False, PhotoImage(file='img/icon.png'))
    window.configure(height=600, width=950, bg='#2A0C4E')
    window.resizable(False, False)
